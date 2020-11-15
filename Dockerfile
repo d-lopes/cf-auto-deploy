@@ -1,6 +1,6 @@
 FROM alpine:3.12
 
-ENV CF_VERSION=7.0.2
+ENV CF_VERSION=7.1.0
 
 RUN apk add --update curl bash openssl jq tar gzip; \
     wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_VERSION}&source=github-rel" -O /tmp/cf-cli.tgz; \
@@ -18,4 +18,3 @@ COPY cf-init.sh /usr/local/bin/cf-init.sh
 RUN chmod +x /usr/local/bin/cf-init.sh
 
 CMD ["bash", "/usr/local/bin/cf-deploy.sh"]
-
