@@ -9,13 +9,6 @@ printf "\n"
 # login and initialize session
 source cf-init.sh
 
-# send notification to slack webhook, if given
-if [ "${SLACK_NOTIFICATION_WEBHOOK}x" != "x" ] && [ "${SLACK_NOTIFICATION_ON_START_MSG}x" != "x" ]; then
-    printf "\nSending start notification to Slack webhook: %s\n" "${SLACK_NOTIFICATION_WEBHOOK}"
-    PAYLOAD="{\"text\":\"${SLACK_NOTIFICATION_ON_START_MSG}\",\"username\": \"deployment-script\",\"icon_emoji\": \":robot_face:\"}"
-    curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" "${SLACK_NOTIFICATION_WEBHOOK}"
-fi
-
 printf "\n\n"
 echo "------------------------------"
 echo "| Run pre-processing scripts |"
@@ -96,13 +89,6 @@ done
 
 if [ "${#POST_PROCESSING_SCRIPT[@]}" == 0 ]; then
     echo "no scripts to run."
-fi
-
-# send notification to slack webhook, if given
-if [ "${SLACK_NOTIFICATION_WEBHOOK}x" != "x" ] && [ "${SLACK_NOTIFICATION_ON_FINISH_MSG}x" != "x" ]; then
-    printf "\nSending finish notification to Slack webhook: %s\n" "${SLACK_NOTIFICATION_WEBHOOK}"
-    PAYLOAD="{\"text\":\"${SLACK_NOTIFICATION_ON_FINISH_MSG}\",\"username\": \"deployment-script\",\"icon_emoji\": \":robot_face:\"}"
-    curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" "${SLACK_NOTIFICATION_WEBHOOK}"
 fi
 
 printf "\n\n"
