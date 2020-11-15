@@ -1,6 +1,6 @@
 # Example Scripts
 
-This directory contains 2 examples for pre- and post-processing scripts for sending a slack notification to webhook before and after the deployment process has run.
+This directory contains two examples for pre- and post-processing scripts that send a slack notification to a webhook.
 
 When spinning up the docker container, you can provide additional environment variables which will be available in these pre- and post-processing scripts:
 
