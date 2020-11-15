@@ -26,7 +26,7 @@ docker run --rm \
   -e CF_TOKEN_URL="${CF_TOKEN_URL}" \
   -e CF_CREDENTIALS_URL="${CF_CREDENTIALS_URL}" \
   -e CF_SPACE="${CF_SPACE}" \
-dl0pes/cf-auto-deploy:1.0.0
+dl0pes/cf-auto-deploy:1.0.1
 
 ```
 
@@ -47,11 +47,13 @@ Example:
 docker run --rm \
   -v /local/path/to/scripts:/tmp/scripts \
   ...
-dl0pes/cf-auto-deploy:1.0.0
+dl0pes/cf-auto-deploy:1.0.1
 
 ```
 
 This command from above will automatically load your scripts and run them before and after the artifacts are deployed.
+
+Please refer to the [examples](example-scripts) for two scripts which send slack notifications before and after the deployment process. 
 
 ## Tasks
 
@@ -62,23 +64,8 @@ docker run --rm \
  ...
  -e APP_TASKS="sba-db-migrator:.java-buildpack/open_jdk_jre/bin/java de.dlopes.test.ExampleTask -k 256M -m 128M"
  ...
-dl0pes/cf-auto-deploy:1.0.0
+dl0pes/cf-auto-deploy:1.0.1
 
 ```
 
 The task name needs to corespond with the name of your manifest file since these are matched based on their name. Once that tasks is matched to a manifest file, it will be automatically run after the artifact from the manifest has been successfully deployed.
-
-## Notifications
-
-When spnning up the docker container, you can provide additional environment variables to automatically receive notifications on your Slack webhook on start and finish of the deployment process:
-
-```
-docker run --rm \
- ...
- -e SLACK_NOTIFICATION_ON_START_MSG="Just so you know, the user \`jenkins\` is deploying a new version to \`${CF_SPACE}\` - :hourglass_flowing_sand:"
- -e SLACK_NOTIFICATION_ON_FINISH_MSG="A new version was successfully deployed to \`${CF_SPACE}\` - :checkered_flag:"
- -e SLACK_NOTIFICATION_WEBHOOK="https://hooks.slack.com/services/your_webhoook_id"
- ...
-dl0pes/cf-auto-deploy:1.0.0
-
-```
