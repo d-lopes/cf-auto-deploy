@@ -11,6 +11,6 @@ docker run --rm \
  -e VERSION="2.6.9"
  -e USER="jenkins"
  ...
-dl0pes/cf-auto-deploy:1.0.2
+dl0pes/cf-auto-deploy:1.0.3
 
 ```

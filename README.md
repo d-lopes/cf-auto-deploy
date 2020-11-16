@@ -30,7 +30,7 @@ docker run --rm \
   -e CF_TOKEN_URL="${CF_TOKEN_URL}" \
   -e CF_CREDENTIALS_URL="${CF_CREDENTIALS_URL}" \
   -e CF_SPACE="${CF_SPACE}" \
-dl0pes/cf-auto-deploy:1.0.2
+dl0pes/cf-auto-deploy:1.0.3
 
 ```
 
@@ -51,13 +51,58 @@ Example:
 docker run --rm \
   -v /local/path/to/scripts:/tmp/scripts \
   ...
-dl0pes/cf-auto-deploy:1.0.2
+dl0pes/cf-auto-deploy:1.0.3
 
 ```
 
 This command from above will automatically load your scripts and run them before and after the artifacts are deployed.
 
 Please refer to the [examples](example-scripts) for two scripts which send slack notifications before and after the deployment process.
+
+**How to test your scripts?**
+
+Although `cf-auto-deploy` shall be used to rollout changes in a stadardized manner, sometimes it is simply needed to test
+Likewise arbitrary CF CLI commands could be run as one-off tasks. `cf-auto-deploy` is prepared to handle such situations.
+
+First run the docker container in interactive mode:
+
+```
+docker run --rm -it \
+  -v /local/path/to/artifacts:/tmp/artifacts \
+  -v /local/path/to/manifests:/tmp/manifests \
+  -v /local/path/to/stage-vars:/tmp/stage-vars \
+  -v /local/path/to/scripts:/tmp/scripts \
+  -e CF_CLIENT_ID="${CF_CLIENT_ID}" \
+  -e CF_CLIENT_SECRET="${CF_CLIENT_SECRET}" \
+  -e CF_TOKEN_URL="${CF_TOKEN_URL}" \
+  -e CF_CREDENTIALS_URL="${CF_CREDENTIALS_URL}" \
+  -e CF_SPACE="${CF_SPACE}" \
+dl0pes/cf-auto-deploy:1.0.3 bash
+```
+
+When you are inside the docker container, you are connected to a bash and you can simply execute the initialization script:
+
+```
+% cf-init.sh
+```
+
+As a result you should see this output:
+
+```
+Authenticating...
+OK
+
+Targeted org <YOUR ORG>.
+
+Targeted space <YOUR SPACE>.
+
+API endpoint:   https://your.api-server.com/v1/api
+API version:    3.88.0
+user:           <generated>
+org:            <YOUR ORG>
+space:          <YOUR SPACE>
+```
+... and off you go
 
 ### Tasks
 
@@ -68,7 +113,7 @@ docker run --rm \
  ...
  -e APP_TASKS="sba-db-migrator:.java-buildpack/open_jdk_jre/bin/java de.dlopes.test.ExampleTask -k 256M -m 128M"
  ...
-dl0pes/cf-auto-deploy:1.0.2
+dl0pes/cf-auto-deploy:1.0.3
 
 ```
 

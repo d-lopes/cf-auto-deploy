@@ -1,23 +1,31 @@
 #!/bin/bash
 
 printf "\n\n"
-echo "**************************"
-echo "* Deploy process started *"
-echo "**************************"
+echo "******************************"
+echo "* Deployment process started *"
+echo "******************************"
 printf "\n"
 
 # login and initialize session
 source cf-init.sh
+if [ $? -eq 1 ]; then
+   echo "Abort deployment!"
+   exit -1
+fi
 
 printf "\n\n"
-echo "------------------------------"
+echo "++++++++++++++++++++++++++++++"
 echo "| Run pre-processing scripts |"
-echo "------------------------------"
+echo "++++++++++++++++++++++++++++++"
 printf "\n"
 
 # run pre-processing scripts
 PRE_PROCESSING_SCRIPTS=$(ls /tmp/scripts/pre-*.sh 2>/dev/null | sort)
 for PRE_PROCESSING_SCRIPT in $PRE_PROCESSING_SCRIPTS; do
+    
+    printf "\n\nrun script: '%s'" "${PRE_PROCESSING_SCRIPT}"
+    printf "\n---------------------------------------------"
+
     source "${PRE_PROCESSING_SCRIPT}"
 done
 
@@ -27,9 +35,9 @@ fi
 
 # carry out deployments
 printf "\n\n"
-echo "---------------------------------"
+echo "+++++++++++++++++++++++++++++++++"
 echo "| Deploy application components |"
-echo "---------------------------------"
+echo "+++++++++++++++++++++++++++++++++"
 printf "\n"
 
 IFS=',' read -r -a TASKS <<< "${APP_TASKS}"
@@ -55,9 +63,9 @@ for MANIFEST in $MANIFESTS; do
     # deploy from manifest with or without vars file
     printf "\nProcessing %s\n" "${MANIFEST}"
     if [ $HAS_TASK == true ]; then
-        cf push --manifest "${MANIFEST}" --vars-file "/tmp/vars/${CF_SPACE}.yml" --no-start
+        cf push --manifest "${MANIFEST}" --vars-file "/tmp/stage-vars/${CF_SPACE}.yml" --no-start
     else
-        cf push --manifest "${MANIFEST}" --vars-file "/tmp/vars/${CF_SPACE}.yml" --strategy rolling
+        cf push --manifest "${MANIFEST}" --vars-file "/tmp/stage-vars/${CF_SPACE}.yml" --strategy rolling
     fi
 
     # run task if there is one
@@ -73,17 +81,21 @@ if [ "${#MANIFESTS[@]}" == 0 ]; then
     echo "no application components to deploy."
 fi
 
-printf "\nDeployment done\n"
+printf "\Application components deployed\n"
 
 printf "\n\n"
-echo "-------------------------------"
+echo "+++++++++++++++++++++++++++++++"
 echo "| Run post-processing scripts |"
-echo "-------------------------------"
+echo "+++++++++++++++++++++++++++++++"
 printf "\n"
 
 # run post-processing scripts
 POST_PROCESSING_SCRIPT=$(ls /tmp/scripts/post-*.sh 2>/dev/null | sort)
 for POST_PROCESSING_SCRIPT in $POST_PROCESSING_SCRIPT; do
+
+    printf "\n\nrun script: '%s'" "${POST_PROCESSING_SCRIPT}"
+    printf "\n----------------------------------------------"
+
     source "${POST_PROCESSING_SCRIPT}"
 done
 
