@@ -12,7 +12,7 @@ This alpine based docker image uses the [Cloud Foundry CLI](https://github.com/c
 
 In order to put this docker image to work, simply provide mandatory environment variables and mount your directories for local artifacts, manifests as well as stage-related variables.
 
-+Example:+
+Example:
 
 ```
 CF_CLIENT_ID="<secret>"
@@ -45,7 +45,7 @@ The following directories must be mounted when a docker container is started fro
 
 You can mount a directory with shell scripts for pre- and post-processing. Pre-processing scripts need to start with the prefix `pre-` and post-processing scripts with the prefix `post-`.
 
-+Example:+
+Example:
 
 ```
 docker run --rm \
@@ -109,7 +109,7 @@ space:          <YOUR SPACE>
 
 You can provide a comma-separated list of (task name):(task command) tupels. 
 
-+Example:+
+Example:
 
 ```
 docker run --rm \
