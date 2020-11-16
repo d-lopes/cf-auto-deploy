@@ -12,7 +12,7 @@ This alpine based docker image uses the [Cloud Foundry CLI](https://github.com/c
 
 In order to put this docker image to work, simply provide mandatory environment variables and mount your directories for local artifacts, manifests as well as stage-related variables.
 
-Example:
++Example:+
 
 ```
 CF_CLIENT_ID="<secret>"
@@ -45,7 +45,7 @@ The following directories must be mounted when a docker container is started fro
 
 You can mount a directory with shell scripts for pre- and post-processing. Pre-processing scripts need to start with the prefix `pre-` and post-processing scripts with the prefix `post-`.
 
-Example:
++Example:+
 
 ```
 docker run --rm \
@@ -61,8 +61,9 @@ Please refer to the [examples](example-scripts) for two scripts which send slack
 
 **How to test your scripts?**
 
-Although `cf-auto-deploy` shall be used to rollout changes in a stadardized manner, sometimes it is simply needed to test
-Likewise arbitrary CF CLI commands could be run as one-off tasks. `cf-auto-deploy` is prepared to handle such situations.
+Although `cf-auto-deploy` shall be used to rollout changes in a stadardized manner, sometimes it is simply needed to test your scripts.
+Likewise arbitrary CF CLI commands could be run as one-off tasks. In both cases, you need to do stuff from the inside of the container. 
+`cf-auto-deploy` is prepared to handle such situations.
 
 First run the docker container in interactive mode:
 
@@ -106,7 +107,9 @@ space:          <YOUR SPACE>
 
 ### Tasks
 
-You can provide a comma-separated list of (task name):(task command) tupels. Example:
+You can provide a comma-separated list of (task name):(task command) tupels. 
+
++Example:+
 
 ```
 docker run --rm \
